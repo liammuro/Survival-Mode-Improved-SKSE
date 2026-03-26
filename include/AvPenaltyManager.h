@@ -244,14 +244,14 @@ private:
 
     void ApplyHandler(const AvPenaltyHandler& handler)
     {
-        if (handler.associatedNeed)
+        /*if (handler.associatedNeed)
         {
             if (handler.associatedNeed->NeedAvPenDisabled->value == 1.0f || handler.associatedNeed->CurrentlyStopped)
             {
                 RemoveNeedAttributePenalty(handler.associatedNeed);
                 return;
             }
-        }
+        }*/
 
         auto player   = Utility::GetPlayer();
         auto maxPenAv = GetMaxAttributeAv(handler.affectedAV, handler.trackedAV);
@@ -275,11 +275,11 @@ private:
         float magDelta = lastPenaltyMag - newPenaltyMag;
 
         if (magDelta > 0) {
-            player->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, handler.affectedAV, -1*magDelta);
+            player->AsActorValueOwner()->RestoreActorValue(handler.affectedAV, magDelta);
         }
 
         player->AsActorValueOwner()->SetActorValue(handler.trackedAV, newPenaltyMag);
-        player->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kPermanent, handler.affectedAV, magDelta);
+        player->AsActorValueOwner()->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kPermanent, handler.affectedAV, magDelta);
 
         SetAttributePenaltyUIGlobal(penPerc, handler.uiGlobal);
     }
@@ -291,7 +291,7 @@ private:
         if (currentPenaltyMag > 0) {
             Utility::GetPlayer()->AsActorValueOwner()->SetActorValue(need->NeedPenaltyAV, 0.0f);
             SetAttributePenaltyUIGlobal(0.0f, need->NeedPenaltyUIGlobal);
-            Utility::GetPlayer()->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kPermanent, need->ActorValPenaltyAttribute, currentPenaltyMag);
+            Utility::GetPlayer()->AsActorValueOwner()->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kPermanent, need->ActorValPenaltyAttribute, currentPenaltyMag);
         }
     }
 

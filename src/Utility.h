@@ -363,15 +363,8 @@ public:
 		msg->GetDescription(messageDesc, msg);
 		if (messageBox) {
 			RE::DebugMessageBox(messageDesc.c_str());
-			/*
-			auto tut = RE::UI::GetSingleton()->GetMenu(RE::TutorialMenu::MENU_NAME);
-			RE::UIMessage 
-			tut->ProcessMessage()
-			auto uiQueue = RE::UIMessageQueue::GetSingleton();
-			uiQueue->AddMessage(RE::TutorialMenu::MENU_NAME, RE::UI_MESSAGE_TYPE::kShow, uiQueue->CreateUIMessageData("TEST")); 
-			*/
 		} else {
-			RE::DebugNotification(messageDesc.c_str());
+            RE::SendHUDMessage::ShowHUDMessage(messageDesc.c_str());
 		}
 	}
 
@@ -382,6 +375,14 @@ public:
         for(auto* quest: smQuestsToHandle)
         {
             DetachQuestScripts(quest);
+        }
+    }
+
+    void SetSurvivalModeEnabled(float value)
+    {
+        Survival_ModeEnabled->value = value;
+        if (Survival_ModeEnabledShared) {
+            Survival_ModeEnabledShared->value = value;
         }
     }
 
@@ -491,7 +492,7 @@ public:
     {
         auto* package = Utility::GetPlayer()->GetCurrentPackage();
 
-        if (package && package->packData.packType == RE::PACKAGE_PROCEDURE_TYPE::kVampireFeed) {
+        if (package && package->packData.packType == RE::PACKAGE_TYPE::kVampireFeed) {
             return true;
         }
         return false;
