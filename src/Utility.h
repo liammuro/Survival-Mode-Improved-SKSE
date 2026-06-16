@@ -404,6 +404,22 @@ public:
 
         vm->ResetAllBoundObjects(handle);
         vm->GetObjectBindPolicy()->bindInterface->RemoveAllBoundObjects(handle);
+
+        logger::info("Removing scripts from quest aliases");
+        for (auto alias : quest->aliases) {
+            auto aliasHandle = policy->GetHandleForObject(alias->GetVMTypeID(), alias);
+
+            if (const auto it = vm->attachedScripts.find(aliasHandle); it != vm->attachedScripts.end()) {
+                for (auto& script : it->second) {
+                    if (auto typeInfo = script ? script->GetTypeInfo() : nullptr) {
+                        logger::info("Attached alias script found. Clearing {}", typeInfo->name.c_str());
+                    }
+                }
+            }
+
+            vm->ResetAllBoundObjects(aliasHandle);
+            vm->GetObjectBindPolicy()->bindInterface->RemoveAllBoundObjects(aliasHandle);
+        }
     }
 
 	bool SurvivalToggle()
@@ -510,6 +526,19 @@ public:
 
 		return lich;
 	}
+
+    static bool IsItemQuestItem(RE::AlchemyItem* eatenItem)
+    {
+        auto inv = Utility::GetPlayer()->GetInventory();
+
+        for (const auto& [item, data] : inv) {
+            auto& entryData = data.second;
+            if (entryData->IsQuestObject() && item->GetFormID() == eatenItem->GetFormID()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	static bool PlayerIsInJail()
 	{

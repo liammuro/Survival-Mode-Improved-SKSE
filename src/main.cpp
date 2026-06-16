@@ -14,15 +14,16 @@ void InitListener(SKSE::MessagingInterface::Message* a_msg)
 	switch (a_msg->type) {
 	case SKSE::MessagingInterface::kNewGame:
 		Serialization::LoadChecks();
+        Utility::GetSingleton()->ClearSurvivalModeQuestScripts();
 		break;
 	case SKSE::MessagingInterface::kPostLoadGame:
 		Serialization::LoadChecks();
+        Utility::GetSingleton()->ClearSurvivalModeQuestScripts();
 		break;
 	case SKSE::MessagingInterface::kDataLoaded:
 		FormLoader::GetSingleton()->LoadAllForms();
         GlobalUpdater::LoadBindings();
         GlobalUpdater::CacheGlobals();
-        Utility::GetSingleton()->ClearSurvivalModeQuestScripts();
 		Settings::LoadSettings();
         Events::Register();
         AvPenaltyManager::GetSingleton()->InitializeHandlers();

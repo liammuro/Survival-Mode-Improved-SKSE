@@ -293,10 +293,10 @@ namespace Events
 			if (!a_event || !a_event->actor || !a_event->actor->IsPlayerRef()) {
 				return RE::BSEventNotifyControl::kContinue;
 			}
-
+            
 			auto alchemyItem = RE::TESForm::LookupByID<RE::AlchemyItem>(a_event->baseObject);
 
-			if (alchemyItem && alchemyItem->IsFood() && Utility::IsSurvivalEnabled()) {
+			if (alchemyItem && alchemyItem->IsFood() && Utility::IsSurvivalEnabled() && !Utility::IsItemQuestItem(alchemyItem)) {
 				ProcessHungerOnEquipEvent(alchemyItem);
 			}
 

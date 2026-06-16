@@ -110,7 +110,6 @@ public:
 
     void RemoveAllAvPenalties()
     {
-        //TODO - Swap to be based AVs instead of needs?
         RemoveNeedAttributePenalty(NeedCold::GetSingleton());
         RemoveNeedAttributePenalty(NeedHunger::GetSingleton());
         RemoveNeedAttributePenalty(NeedExhaustion::GetSingleton());
@@ -297,9 +296,13 @@ private:
 
     virtual float GetPenaltyPercentAmount(NeedBase* need)
     {
-        auto util    = Utility::GetSingleton();
-        auto penalty = (need->CurrentNeedValue->value - need->NeedStage2->value - 1) / (need->NeedMaxValue->value - need->NeedStage2->value - 1);
-        penalty      = std::clamp(penalty, 0.0f, util->MaxAvPenaltyPercent);
+        float penalty = 0.0f;
+        if (!need->CurrentlyStopped)
+        {
+            auto util    = Utility::GetSingleton();
+            penalty      = (need->CurrentNeedValue->value - need->NeedStage2->value - 1) / (need->NeedMaxValue->value - need->NeedStage2->value - 1);
+            penalty      = std::clamp(penalty, 0.0f, util->MaxAvPenaltyPercent);
+        }
 
         return penalty;
     }
