@@ -72,6 +72,7 @@ namespace Events
 		auto player = Utility::GetPlayer();
         
 		if (!hunger->CurrentlyStopped || util->forceEnableFoodPoisoning) {
+            
 			if (hunger->Survival_FoodRawMeat->HasForm(food) || food->HasKeyword(hunger->VendorItemFoodRaw)) {
 				float diseaseResistMult = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kResistDisease);
 
@@ -295,8 +296,7 @@ namespace Events
 			}
             
 			auto alchemyItem = RE::TESForm::LookupByID<RE::AlchemyItem>(a_event->baseObject);
-
-			if (alchemyItem && alchemyItem->IsFood() && Utility::IsSurvivalEnabled() && !Utility::IsItemQuestItem(alchemyItem)) {
+			if (alchemyItem && alchemyItem->IsFood() && Utility::IsSurvivalEnabled()) {
 				ProcessHungerOnEquipEvent(alchemyItem);
 			}
 
