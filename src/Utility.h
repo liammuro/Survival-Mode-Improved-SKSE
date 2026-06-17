@@ -357,12 +357,13 @@ public:
 		return util->Survival_ModeEnabled->value;
 	}
 
-	static void ShowNotification(RE::BGSMessage* msg, bool messageBox=false)
+	static void ShowNotification(RE::BGSMessage* msg, bool tutorial=false)
 	{
 		RE::BSString messageDesc;
 		msg->GetDescription(messageDesc, msg);
-		if (messageBox) {
-			RE::DebugMessageBox(messageDesc.c_str());
+		if (tutorial) {
+            RE::TutorialMenu::OpenMenu(msg);
+			//RE::DebugMessageBox(messageDesc.c_str());
 		} else {
             RE::SendHUDMessage::ShowHUDMessage(messageDesc.c_str());
 		}
@@ -533,7 +534,7 @@ public:
 
         for (const auto& [item, data] : inv) {
             auto& entryData = data.second;
-            if (entryData->IsQuestObject() && item->GetFormID() == eatenItem->GetFormID()) {
+            if (entryData && entryData->IsQuestObject() && item->GetFormID() == eatenItem->GetFormID()) {
                 return true;
             }
         }
