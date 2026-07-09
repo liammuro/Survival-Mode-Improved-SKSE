@@ -251,7 +251,7 @@ public:
     ModVersion starfrostVer;
 
 	bool WasInOblivion = false;
-	bool DisableFastTravel = true;
+	bool DisableFastTravel = false;
 	bool AutoStart = true;
 	bool DisableCarryWeightPenalty = false;
 	bool DisableDiseaseApplicator = false;
